@@ -53,4 +53,10 @@ spec:
           mountPath: /etc/db-config
         - name: dev-db-secret
           mountPath: /etc/db-secret
-
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "650m"
+            memory: "650Mi"
