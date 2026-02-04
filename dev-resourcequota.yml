@@ -6,7 +6,7 @@ metadata:
   namespace: dev-ns
 spec:
   hard:
-    requests.cpu: "500m"
-    requests.memory: "500Mi"
-    limits.cpu: "1"
-    limits.memory: "1Gi"
+    requests.cpu: "1"
+    requests.memory: "750Mi"
+    limits.cpu: "1500m"
+    limits.memory: "1500Gi"
