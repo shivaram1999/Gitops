@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-db-deploy
+  namespace: dev-ns
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      volumes:
+      - name: dev-db-config
+        configMap:
+          name: dev-configmap
+      - name: dev-db-secret
+        secret:
+          secretName: dev-secret
+      containers:
+      - name: dev-db-deploy-cont
+        image: mysql:8.0
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: dev-configmap
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: dev-secret
+              key: MYSQL_USER
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-secret
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dev-secret
+              key: MYSQL_PASSWORD
+        volumeMounts:
+        - name: dev-db-config
+          mountPath: /etc/db-config
+        - name: dev-db-secret
+          mountPath: /etc/db-secret
+

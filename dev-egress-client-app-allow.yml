@@ -1,0 +1,17 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: dev-egress-client-app-allow
+  namespace: dev-ns
+spec:
+  podSelector:
+    matchLabels:
+      client: tcs
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+      - podSelector:
+          matchLabels:
+            app: webapp

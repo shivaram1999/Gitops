@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-webapp-deploy
+  namespace: dev-ns
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      name: dev-webapp-deploy-pod
+      labels:
+        app: webapp
+    spec:
+      volumes:
+        - name: dev-config-vol
+          configMap:
+            name: dev-configmap
+        - name: dev-secret-vol
+          secret:
+            secretName: dev-secret
+      containers:
+        - name: dev-webapp-deploy-cont
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: dev-config-vol
+              mountPath: /etc/config/
+            - name: dev-secret-vol
+              mountPath: /etc/secret/
+
+
